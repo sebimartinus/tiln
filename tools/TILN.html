@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       /* Set the size of the div element that contains the map */
+      #map {
+        height: 400px;
+        width: 600px;
+       }
+    </style>
+  </head>
+  <body>
+    <!--The div elements for the map and message -->
+    <div id="map"></div>
+    <div id="msg"></div>
+    <script>
+// Initialize and add the map
+var map;
+function initMap() {
+  // The map, centered on Central Park
+  const center = {lat: 40.774102, lng: -73.971734};
+  const options = {zoom: 15, scaleControl: true, center: center};
+  map = new google.maps.Map(
+      document.getElementById('map'), options);
+  // Locations of landmarks
+  const palace = {lat: 47.157208, lng: 27.587011};
+  const university = {lat: 47.173966, lng: 27.574834};
+  const stadium = {lat: 47.184457, lng: 27.561043};
+  // The markers for The Dakota and The Frick Collection
+  var mk1 = new google.maps.Marker({position: palace, map: map});
+  var mk2 = new google.maps.Marker({position: university, map: map});
+  var mk3 = new google.maps.Marker({position: stadium, map: map});
+  // Draw a line showing the straight distance between the markers
+  var line = new google.maps.Polyline({path: [palace, university], map: map});
+  let directionsService = new google.maps.DirectionsService();
+  let directionsRenderer = new google.maps.DirectionsRenderer();
+  directionsRenderer.setMap(map); // Existing map object displays directions
+  // Create route from existing points used for markers
+  const route = {
+      origin: palace,
+	  waypoints: [stadium],
+      destination: university,
+      travelMode: 'WALKING'
+  }
+  directionsService.route(route,
+    function(response, status) { // anonymous function to capture directions
+      if (status !== 'OK') {
+        window.alert('Directions request failed due to ' + status);
+        return;
+      } else {
+        directionsRenderer.setDirections(response); // Add route to the map
+        var directionsData = response.routes[0].legs[0]; // Get data about the mapped route
+        if (!directionsData) {
+          window.alert('Directions request failed');
+          return;
+        }
+        else {
+          document.getElementById('msg').innerHTML += " Driving distance is " + directionsData.distance.text + " (" + directionsData.duration.text + ").";
+        }
+      }
+    });
+}
+
+    </script>
+    <!--Load the API from the specified URL -- remember to replace YOUR_API_KEY-->
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjBYP7p7uWUHBRQGibO4byXY2GNmUphjw&callback=initMap">
+    </script>
+  </body>
+</html>
