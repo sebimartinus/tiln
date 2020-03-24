@@ -47,16 +47,65 @@ $body = $page['body'];
 
 $dom = new DOMDocument();
 $dom->loadHTML($body);
-
+#Afisare text preluat din site.
 $xpath = new DOMXPath($dom);
 $tags = $xpath->query('//div[@class="post_text"]');
 foreach ($tags as $tag) {
     $node_value = trim($tag->nodeValue);
     echo $node_value;
-preg_match_all('/[A-Z][a-z]*/',$node_value,$matches2);
-foreach($matches2 as $part){
-    print_r($part);
 	echo "<br>";
+	echo "<br>";
+	}
+#Afisare toate cuvintele care incep cu litera mare si cele formate din mai multe substantive proprii.
+preg_match_all('/( [A-Z][a-zA-Z]+)+/',$node_value,$substproprii);
+	if($substproprii[0]!=NULL){
+		for ($i = 1; $i <= sizeof($substproprii[0]); $i++){ 
+			print_r($substproprii[0][$i]);
+			echo "<br>";
+		}
+	}
+
+echo "<br>";
+echo "<br>";
+#Afisare toate numele de strazi,alei,cai sau sosele.
+preg_match_all('/ (strada|aleea|calea|soseaua|Strada|Aleea|Calea|Soseaua)+( [A-Z][a-zA-Z]+)+ [0-9]*/',$node_value,$strazi);
+	if($strazi[0]!=NULL){
+		for ($i = 1; $i <= sizeof($strazi[0]); $i++) 
+			print_r($strazi[0][$i]);
+	}
+
+#Afisare Biserici, Manastiri, Catedrale.
+preg_match_all('/ (Biserica|Manastirea|Mitropolia|Catedrala|biserica|manastirea|mitropolia|catedrala)+( [A-Z][a-zA-Z]+)+/',$node_value,$biserici);
+if($biserici[0]!=NULL){
+		for ($i = 1; $i <= sizeof($biserici[0]); $i++) 
+			print_r($biserici[0][$i]);
+	}
+#Afisare rauri, parauri, izvoare, cascade,lacuri,mari.
+preg_match_all('/ (raul|paraul|izvorul|marea|lacul|cascada|Raul|Paraul|Cascada|Izvorul|Marea|Lacul)+( [A-Z][a-zA-Z]+)+/',$node_value,$ape);
+if($ape[0]!=NULL){
+		for ($i = 1; $i <= sizeof($ape[0]); $i++) 
+			print_r($ape[0][$i]);
+	}
+#Afisare substantive cu articol
+preg_match_all('/( )*([A-Z][a-zA-Z]+)+ (cel|al|de|lui) ([A-Z][a-zA-Z]+)+/',$node_value,$propriicuarticol);
+if($propriicuarticol[0]!=NULL){
+		for ($i = 1; $i <= sizeof($propriicuarticol[0]); $i++) 
+			print_r($propriicuarticol[0][$i]);
+	}
+
+#Afisare token cautare pe google.(Verificare existenta geolocatie)
+echo "<br>";
+echo "<br>";
+function check_geolocation($nameofgeo){
+$url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=".str_replace(" ","%",$nameofgeo)."&inputtype=textquery&fields=photos,formatted_address,name,opening_hours,rating&locationbias=circle:2000@47.6918452,-122.2226413&key=AIzaSyDQfsEll4lB-xdxkLXGZA7_a2rMCyVM4Ok";
+$json = file_get_contents($url);
+$json_data = json_decode($json, true);
+if ($json_data["status"]=="ZERO_RESULTS")
+	echo("Numele introdus nu este o geolocatie!");
+else
+	echo "OK if this is a Geolocation: ". $json_data["status"];
 }
-}
+echo ("Check if Iasi is Geolocation");
+echo ("<br>");
+check_geolocation("LOVE");
 ?>
