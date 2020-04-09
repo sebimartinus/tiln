@@ -1,4 +1,32 @@
 <?php 
+ini_set('max_execution_time', 300);
+set_time_limit(300);
+#Afisare token cautare pe google.(Verificare existenta geolocatie)
+function check_geolocation($nameofgeo){
+	$url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=".str_replace(" ","%",$nameofgeo)."&inputtype=textquery&fields=photos,formatted_address,name&locationbias=circle:2000@47.6918452,-122.2226413&key=AIzaSyDQfsEll4lB-xdxkLXGZA7_a2rMCyVM4Ok";
+	$json = file_get_contents($url);
+	$json_data = json_decode($json, true);
+	if ($json_data["status"]=="ZERO_RESULTS")
+		return("Numele introdus nu este o geolocatie!");
+	else{
+		#print_r($json_data['candidates'][0]['name']);
+		#echo " este nume pentru-> "; 
+		#echo "<br><br>";
+		return($json_data["status"]);
+	}
+}
+
+function check_dictionary($wordtocheck){
+	$url_dex = "https://dexonline.ro/definitie/".str_replace(" ","_",$wordtocheck)."/json";
+	$json_dex = file_get_contents($url_dex);
+	$json_data_dex = json_decode($json_dex,true);
+	echo $json_data_dex["definitions"][0];
+	if($json_data_dex["definitions"] == NULL)
+		return "OK";
+	else
+		return "BAD";
+}
+	$cuvinte=array();
 	error_reporting(E_ERROR | E_PARSE);
 	function _http ( $target, $referer ) {
 	//Initialize Handle
@@ -57,11 +85,14 @@ foreach ($tags as $tag) {
 	echo "<br>";
 	}
 #Afisare toate cuvintele care incep cu litera mare si cele formate din mai multe substantive proprii.
-preg_match_all('/( [A-Z][a-zA-Z]+)+/',$node_value,$substproprii);
+preg_match_all('/( [A-Z][a-zA-Z]+[a-zA-Z]+)( [A-Z][a-zA-Z]+[a-zA-Z]+)+/',$node_value,$substproprii);
 	if($substproprii[0]!=NULL){
 		for ($i = 1; $i <= sizeof($substproprii[0]); $i++){ 
-			print_r($substproprii[0][$i]);
-			echo "<br>";
+			if(check_geolocation($substproprii[0][$i])=="OK")
+				if(check_dictionary($substproprii[0][$i])!="BAD"){
+					if(!in_array($substproprii[0][$i],$cuvinte))
+						array_push($cuvinte,$substproprii[0][$i]);
+				}
 		}
 	}
 
@@ -70,7 +101,13 @@ echo "<br>";
 #Afisare toate numele de strazi,alei,cai sau sosele.
 preg_match_all('/ (strada|aleea|calea|soseaua|Strada|Aleea|Calea|Soseaua)+( [A-Z][a-zA-Z]+)+ [0-9]*/',$node_value,$strazi);
 	if($strazi[0]!=NULL){
-		for ($i = 1; $i <= sizeof($strazi[0]); $i++) 
+		for ($i = 1; $i <= sizeof($strazi[0]); $i++){ 
+			if(check_geolocation($strazi[0][$i])=="OK")
+				if(check_dictionary($strazi[0][$i])!="BAD"){
+					if(!in_array($strazi[0][$i],$cuvinte))
+						array_push($cuvinte,$strazi[0][$i]);
+				}
+		} 
 			print_r($strazi[0][$i]);
 	}
 
@@ -78,34 +115,38 @@ preg_match_all('/ (strada|aleea|calea|soseaua|Strada|Aleea|Calea|Soseaua)+( [A-Z
 preg_match_all('/ (Biserica|Manastirea|Mitropolia|Catedrala|biserica|manastirea|mitropolia|catedrala)+( [A-Z][a-zA-Z]+)+/',$node_value,$biserici);
 if($biserici[0]!=NULL){
 		for ($i = 1; $i <= sizeof($biserici[0]); $i++) 
+			{ 
+			if(check_geolocation($biserici[0][$i])=="OK")
+				if(check_dictionary($biserici[0][$i])!="BAD"){
+					if(!in_array($biserici[0][$i],$cuvinte))
+						array_push($cuvinte,$biserici[0][$i]);
+				}
+			}
 			print_r($biserici[0][$i]);
 	}
 #Afisare rauri, parauri, izvoare, cascade,lacuri,mari.
 preg_match_all('/ (raul|paraul|izvorul|marea|lacul|cascada|Raul|Paraul|Cascada|Izvorul|Marea|Lacul)+( [A-Z][a-zA-Z]+)+/',$node_value,$ape);
 if($ape[0]!=NULL){
 		for ($i = 1; $i <= sizeof($ape[0]); $i++) 
-			print_r($ape[0][$i]);
+			{ 
+			if(check_geolocation($ape[0][$i])=="OK")
+				if(check_dictionary($ape[0][$i])!="BAD"){
+					if(!in_array($ape[0][$i],$cuvinte))
+						array_push($cuvinte,$ape[0][$i]);
+				}
+		}
 	}
 #Afisare substantive cu articol
 preg_match_all('/( )*([A-Z][a-zA-Z]+)+ (cel|al|de|lui) ([A-Z][a-zA-Z]+)+/',$node_value,$propriicuarticol);
 if($propriicuarticol[0]!=NULL){
 		for ($i = 1; $i <= sizeof($propriicuarticol[0]); $i++) 
-			print_r($propriicuarticol[0][$i]);
+			{ 
+			if(check_geolocation($propriicuarticol[0][$i])=="OK")
+				if(check_dictionary($propriicuarticol[0][$i])!="BAD"){
+					if(!in_array($biserici[0][$i],$cuvinte))
+						array_push($cuvinte,$propriicuarticol[0][$i]);
+				}
+		}
 	}
-
-#Afisare token cautare pe google.(Verificare existenta geolocatie)
-echo "<br>";
-echo "<br>";
-function check_geolocation($nameofgeo){
-$url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=".str_replace(" ","%",$nameofgeo)."&inputtype=textquery&fields=photos,formatted_address,name,opening_hours,rating&locationbias=circle:2000@47.6918452,-122.2226413&key=AIzaSyDQfsEll4lB-xdxkLXGZA7_a2rMCyVM4Ok";
-$json = file_get_contents($url);
-$json_data = json_decode($json, true);
-if ($json_data["status"]=="ZERO_RESULTS")
-	echo("Numele introdus nu este o geolocatie!");
-else
-	echo "OK if this is a Geolocation: ". $json_data["status"];
-}
-echo ("Check if Iasi is Geolocation");
-echo ("<br>");
-check_geolocation("LOVE");
+	print_r($cuvinte);
 ?>
