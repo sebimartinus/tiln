@@ -8,18 +8,17 @@ if(isset($_POST['trimitere-text']))
 	<link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body>
-<div class="container">
-	<span class="title">Route tracer following text descriptions</span>
-	<div class="texturi-preluate">
-		<a href="./crawler.php" class="site-uri">Text de la Dana Rogoz</a>
-		<a href="./crawler2.php"class="site-uri">Text de la Adela Popescu</a>
-		<div class="c"></div>
-	</div>
-		<form action="text-utilizator.php" method="post" class="formular-text-utilizator">
-			<label> Introduceti textul dorit</label>
-			<textarea name="text"> </textarea>
-			<input type="submit" name="trimitere-text" value="Trimite">
-		</form>
+    <div class = "background-image">
+        <div class="container">
+        <span class="title">Route tracer following text descriptions</span>
+            <form action="text-utilizator.php" method="post" class="formular-text-utilizator">
+                <label> Introduceți textul dorit</label>
+                <div class = "line"></div> 
+                <span class = "text-diactritice">Vă rugăm să introduceți locațiile cu diacritice pentru a vă oferi locația corespunzătoare.</span>        
+                <textarea name="text"> </textarea>
+                <input type="submit" name="trimitere-text" value="Trimite">
+            </form>
+            </div>
 </div>
 </body>
 </html>

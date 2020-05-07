@@ -1,9 +1,8 @@
 <?php
-#if(isset($_POST['trimitere-geolocatii'])){
-    #foreach($_POST['geo'] as $value){
-        #echo $value.'<br/>';
-        #}
-#}
+$loc=array();
+foreach($_POST['key'] as $k=>$value){
+	$loc[$value]=$_POST['val'][$k];
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -14,29 +13,30 @@
     <link rel="stylesheet" href="style.css" type="text/css">
   </head>
   <body>
-    <div id="map"></div>
-    <div id="right-panel">
+	<div id="map"></div>
+	<div id="right-panel">
     <div>
     <b>Punct de plecare:</b>
     <select id="start">
-		<?php foreach($_POST['geo'] as $value)
-				echo "<option value='$value'>$value</option>" ;
+		<?php foreach($loc as $k=>$value)
+				echo "<option value='$k'>$value</option>" ;
 		?>
     </select>
     <br>
     <b>Directii:</b> <br>
     <i>(Ctrl+Click or Cmd+Click for multiple selection)</i> <br>
     <select multiple id="waypoints">
-      <?php foreach($_POST['geo'] as $value)
-				echo "<option value='$value'>$value</option>" ;
+      <?php foreach($loc as $k=>$value)
+				echo "<option value='$k'>$value</option>" ;
 		?>
     </select> 
     <br>
     <b>Sfarsit:</b>
     <select id="end">
-      <?php foreach($_POST['geo'] as $value)
-				echo "<option value='$value'>$value</option>" ;
+      <?php foreach($loc as $k=>$value)
+				echo "<option value='$k'>$value</option>" ;
 		?>
+		
     </select>
     <br>
       <input type="submit" id="submit">

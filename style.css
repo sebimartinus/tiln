@@ -2,47 +2,28 @@
 .container{
 	margin:0 auto;
 	width: 90%;
-	max-width: 1400px;
 	height: inherit;
 }
 .texturi-preluate{
 	margin-top:100px;
 }
-.site-uri{
-	text-decoration:none;
-	font-size:35px;
-	display:block;
-	width:45%;
-	float:left;
-	margin-right:10%;
-	text-align:center;
-	height:55px;
-	background-color:#464655;
-	padding-top:15px;
-	border-radius:10px;
-	color:white;
-	}
-.site-uri:nth-last-child(2){
-	margin-right:0;
-}
-.site-uri:hover{
-	color:black;
-	background-color:#7E7F9A;
-	transition:0.3s;
-}
 .title{
 	font-size:50px;
-	margin-top:50px;
-	width:100%;
+	width:80%;
+	margin: 0 auto;
 	display:block;
+	background: #CCC;
+	opacity: 0.8;
 	color:#464655;
 	text-align:center;
 	}
 .title2{
-	font-size:35px;
-	margin-top:50px;
-	width:100%;
+	font-size:30px;
+	width:70%;
+	margin: 50px auto;
 	display:block;
+	background: #CCC;
+	opacity: 0.8;
 	color:#464655;
 	text-align:center;
 	}
@@ -50,14 +31,20 @@ body{
 	background-color:#A6A2A2;
 }
 .formular-text-utilizator{
-	width:80%;
-	margin-left:10%;
-	float:left;
-	height:300px;
+	width:50%;
+	margin: 0 auto;
+	height: 400px;
 	margin-top:50px;
-	border-radius:5px;
+	border-width: 3px;
+	border-style: solid;
+	border-image: 
+	  linear-gradient(
+		to bottom, 
+		#303136, 
+		rgba(0, 0, 0, 0)
+	  ) 1 100%;
 	display:block;
-	background-color:#464655;
+	background-color:#f2f1ed;
 }
 .c{
 	clear:both;
@@ -66,8 +53,24 @@ body{
 	width:70%;
 	margin-left:15%;
 	margin-top:20px;
-	color:white;
+	color:#303136;
 	font-size:35px;
+	display:block;
+	text-align: center;
+}
+.line{
+	height: 10px;
+	border: 0;
+	box-shadow: 0 10px 10px -10px #8c8b8b inset;
+	width: 90%;
+	margin: 0 auto;
+}
+.text-diactritice{
+	width:70%;
+	margin-left:15%;
+	margin-top: 20px;
+	color:#303136;
+	font-size: 15px;
 	display:block;
 }
 .formular-text-utilizator textarea{
@@ -77,28 +80,51 @@ body{
 	color:black;
 	font-size:20px;
 	display:block;
-	height:100px;
+	height:150px;
 }
 .formular-text-utilizator input[type="submit"]{
-	float:right;
-	width:20%;
-	margin-right:10%;
-	height:50px;
-	margin-top:50px;
+	border: none;
+	background: #404040;
+	color: #ffffff;
+	margin-top: 30px;
+	margin-left: 15%;
+	font-weight: 100;
+	height: 50px;
+	width: 70%;
+	text-transform: uppercase;
+	display: inline-block;
+	transition: all 0.3s ease 0s;
 }
+.formular-text-utilizator input[type="submit"]:hover {
+	color: #404040;
+	font-weight: 700;
+	letter-spacing: 3px;
+	background: none;
+	-webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+	-moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+	transition: all 0.3s ease 0s;
+	}
 .formular-geo{
-	width:80%;
+	width:50%;
 	display:flex;
-	margin-left:10%;
+	margin-left:25%;
 	float:left;
 	height:auto;
 	margin-top:50px;
-	border-radius:5px;
 	display:block;
-	background-color:#464655;
+	border-width: 3px;
+	border-style: solid;
+	border-image: 
+	  linear-gradient(
+		to bottom, 
+		#303136, 
+		rgba(0, 0, 0, 0)
+	  ) 1 100%;
+	display:block;
+	background-color:#f2f1ed;
 }
 .formular-geo label{
-	color:white;
+	color: #404040;
 	font-size:25px;
 	flex:1;
 }
@@ -110,13 +136,28 @@ body{
 	flex:3;
 }
 .formular-geo input[type="submit"]{
-	float:right;
-	width:20%;
-	margin-right:10%;
-	height:50px;
-	margin-top:50px;
-	margin-bottom:20px;
+	border: none;
+	background: #404040;
+	color: #ffffff;
+	margin-top: 30px;
+	margin-left: 15%;
+	margin-bottom: 10px;
+	font-weight: 100;
+	height: 50px;
+	width: 70%;
+	text-transform: uppercase;
+	display: inline-block;
+	transition: all 0.3s ease 0s;
 }
+.formular-geo input[type="submit"]:hover {
+	color: #404040;
+	font-weight: 700;
+	letter-spacing: 3px;
+	background: none;
+	-webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+	-moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+	transition: all 0.3s ease 0s;
+	}
  #right-panel {
         font-family: 'Roboto','sans-serif';
         line-height: 30px;
@@ -161,3 +202,12 @@ body{
         overflow: scroll;
         height: 174px;
       }
+	.background-image{
+		background-image: url("img.jpg");
+		opacity: 0.9;
+		display:block;
+		height:100vh;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: cover;
+	  }
