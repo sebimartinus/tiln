@@ -4,6 +4,13 @@
 	width: 90%;
 	height: inherit;
 }
+.background-image{
+		background-image: url("img.jpg");
+		opacity: 0.9;
+		display:block;
+		height:200vh;
+		background-size: cover;
+	  }
 .texturi-preluate{
 	margin-top:100px;
 }
@@ -202,12 +209,4 @@ body{
         overflow: scroll;
         height: 174px;
       }
-	.background-image{
-		background-image: url("img.jpg");
-		opacity: 0.9;
-		display:block;
-		height:100vh;
-		background-position: center;
-		background-repeat: no-repeat;
-		background-size: cover;
-	  }
+	

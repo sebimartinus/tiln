@@ -39,7 +39,7 @@
 	$ret = Array("headers" => $header_array, "body" => $body );
 	return $ret;
 }
-$page = _http( "https://www.adelapopescu.eu/vacanta-cu-doi-copii-in-sri-lank/", "" );
+$page = _http( "https://aventurescu.ro/szentendre-bijuteria-colorata-de-langa-budapesta/", "" );
 $headers = $page['headers'];
 $http_status_code = $headers['http_code'];
 $body = $page['body'];
@@ -49,9 +49,10 @@ $dom = new DOMDocument();
 $dom->loadHTML($body);
 
 $xpath = new DOMXPath($dom);
-$tags = $xpath->query('//div[@id="page"]');
+$tags = $xpath->query('//div[@class="post-content post-dynamic description "]');
 foreach ($tags as $tag) {
     $node_value = trim($tag->nodeValue);
     echo $node_value;
+	echo "<br>";
 }
 ?>

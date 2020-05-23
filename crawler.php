@@ -16,16 +16,37 @@ function check_geolocation($nameofgeo){
 	}
 }
 
-function check_dictionary($wordtocheck){
-	$url_dex = "https://dexonline.ro/definitie/".str_replace(" ","_",$wordtocheck)."/json";
-	$json_dex = file_get_contents($url_dex);
-	$json_data_dex = json_decode($json_dex,true);
-	echo $json_data_dex["definitions"][0];
-	if($json_data_dex["definitions"] == NULL)
-		return "OK";
-	else
-		return "BAD";
+function check_city($name_of_city){
+$curl = curl_init();
+$url="https://devru-latitude-longitude-find-v1.p.rapidapi.com/latlon.php?location=".str_replace(" ","%20",$name_of_city);
+curl_setopt_array($curl, array(
+	CURLOPT_URL => $url,
+	CURLOPT_RETURNTRANSFER => true,
+	CURLOPT_FOLLOWLOCATION => true,
+	CURLOPT_ENCODING => "",
+	CURLOPT_MAXREDIRS => 10,
+	CURLOPT_TIMEOUT => 30,
+	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	CURLOPT_CUSTOMREQUEST => "GET",
+	CURLOPT_HTTPHEADER => array(
+		"x-rapidapi-host: devru-latitude-longitude-find-v1.p.rapidapi.com",
+		"x-rapidapi-key: e45c7284efmsh14dfcf76789ddf7p18a940jsncfa57aa5ec9e",
+		"Accept: application/json"
+	),
+));
+$response = curl_exec($curl);
+$err = curl_error($curl);
+$datasearch = json_decode($response, true);
+if ($err) {
+	echo "cURL Error #:" . $err;
+} else {
+	foreach($datasearch['Results'] as $row){
+		if($name_of_city==explode(",",$row['name'])[0])
+			return(explode(",",$row['name'])[0]);
+	}
+	}
 }
+
 	$cuvinte=array();
 	error_reporting(E_ERROR | E_PARSE);
 	function _http ( $target, $referer ) {
@@ -67,7 +88,7 @@ function check_dictionary($wordtocheck){
 	$ret = Array("headers" => $header_array, "body" => $body );
 	return $ret;
 }
-$page = _http( "http://www.danarogoz.com/ne-am-reintalnit-in-2020/", "" );
+$page = _http( "https://aventurescu.ro/szentendre-bijuteria-colorata-de-langa-budapesta/", "" );
 $headers = $page['headers'];
 $http_status_code = $headers['http_code'];
 $body = $page['body'];
@@ -77,12 +98,23 @@ $dom = new DOMDocument();
 $dom->loadHTML($body);
 #Afisare text preluat din site.
 $xpath = new DOMXPath($dom);
-$tags = $xpath->query('//div[@class="post_text"]');
+$tags = $xpath->query('//div[@class="post-dynamic"]');
 foreach ($tags as $tag) {
     $node_value = trim($tag->nodeValue);
     echo $node_value;
 	echo "<br>";
 	echo "<br>";
+	}
+	
+preg_match_all('/([A-Z][a-zâîșăț]*)(-)*\w+/',$text_preluat,$orase);
+	if($orase[0]!=NULL){
+		foreach($orase[0] as $row){
+			if(check_city($row)==$row){
+				$cuvinte[$row]=check_geolocation($row);
+				$adrese[$row]=$row;
+			}
+	
+		}
 	}
 #Afisare toate cuvintele care incep cu litera mare si cele formate din mai multe substantive proprii.
 preg_match_all('/( [A-Z][a-zA-Z]+[a-zA-Z]+)( [A-Z][a-zA-Z]+[a-zA-Z]+)+/',$node_value,$substproprii);

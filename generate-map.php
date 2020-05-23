@@ -75,7 +75,7 @@ foreach($_POST['key'] as $k=>$value){
           destination: document.getElementById('end').value,
           waypoints: waypts,
           optimizeWaypoints: true,
-          travelMode: 'WALKING'
+          travelMode: 'DRIVING'
         }, function(response, status) {
           if (status === 'OK') {
             directionsRenderer.setDirections(response);
